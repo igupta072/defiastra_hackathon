@@ -18,11 +18,11 @@ class FirebaseGameService extends IFirebaseDatabaseService {
             id: SdkRepositoryProvider().uuidV4,
             type: type.name,
             seats: [player],
-            status: GameTableStatus.waiting.name,
+            status: GameTableStatus.inProgress.name,
             createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
           );
           await collectionRef.doc(gameTable.id).set(gameTable.toJson());
-          return GameTable.fromJson(gameTable);
+          return gameTable;
       }
     } catch (e) {
       rethrow;
@@ -36,6 +36,30 @@ class FirebaseGameService extends IFirebaseDatabaseService {
         "rounds" : FieldValue.arrayUnion([
           round.toJson()
         ])
+      });
+
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateTableStatus({required String tableId, required GameTableStatus status}) async {
+    try {
+
+      await collectionRef.doc(tableId).update({
+        "status" : status.name
+      });
+
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateAmount({required String tableId, required num amount}) async {
+    try {
+
+      await collectionRef.doc(tableId).update({
+        "amount" : FieldValue.increment(amount)
       });
 
     } catch(e) {

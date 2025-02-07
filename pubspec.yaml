@@ -42,6 +42,10 @@ dependencies:
 
   #Gg
   get: 4.6.6
+  google_sign_in: ^6.1.6
+
+  #Rr
+  rxdart: ^0.27.7
 
   #Ss
   shimmer: 3.0.0

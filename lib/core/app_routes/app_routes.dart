@@ -1,3 +1,7 @@
+import 'package:defiastra_hackathon/module/dashboard/home_controller.dart';
+import 'package:defiastra_hackathon/module/dashboard/home_page.dart';
+import 'package:defiastra_hackathon/module/signin/login_controller.dart';
+import 'package:defiastra_hackathon/module/signin/login_page.dart';
 import 'package:defiastra_hackathon/module/splash/controller_splash.dart';
 import 'package:defiastra_hackathon/module/splash/page_splash.dart';
 import 'package:get/get.dart';
@@ -9,6 +13,20 @@ class AppRoutes {
         page: () => const SplashPage(),
         binding: BindingsBuilder(() {
           Get.put(SplashController());
+        })),
+
+    GetPage(
+        name: HomePage.routeName,
+        page: () => const HomePage(),
+        binding: BindingsBuilder(() {
+          Get.put(HomeController());
+        })),
+
+    GetPage(
+        name: LoginPage.routeName,
+        page: () => const LoginPage(),
+        binding: BindingsBuilder(() {
+          Get.put(LoginController());
         })),
   ];
 }
