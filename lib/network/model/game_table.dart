@@ -6,6 +6,15 @@ import 'package:defiastra_hackathon/network/model/player.dart';
 /// status : ""
 /// table_amount : ""
 /// created_at : ""
+///
+
+enum GameTableType {
+  roulette
+}
+
+enum GameTableStatus {
+  waiting, inProgress, completed
+}
 
 class GameTable {
   GameTable({
