@@ -24,13 +24,13 @@ void main() async {
   await SdkRepositoryProvider().initialize();
   await OktoSdk().init(
     OktoCore(
-        id: "0xd4397B97cFe9Abbe727cEAf169bCa8bcF72f4aE9",
-        privateKey: "",
-        maxPriorityFeePerGas: "0x3b9aca00",
-        maxFeePerGas: "0x3b9aca00",
-        apiKey: "",
-        jobManagerAddress: "",
-        entryPointContractAddress: ""
+        id: "0x6b6Fad2600Bc57075ee560A6fdF362FfefB9dC3C",
+        privateKey: "2aaa089f7e26ad3d2da3518e1e945d76804372b6bdd044c7f059598c31fa7dcc",
+        maxPriorityFeePerGas: "0xBA43B7400",
+        maxFeePerGas: "0xBA43B7400",
+        apiKey: "b7a36ee9-80e3-4063-b2a1-f9f482a8db51",
+        jobManagerAddress: "0xed8Fe2543efFF64FC3567B03b612AA82C409579a",
+        entryPointContractAddress: "0xb0C42f19bBb23E52f75813404eeEc0D189b3A61B"
     )
   );
   runApp(const Application());
