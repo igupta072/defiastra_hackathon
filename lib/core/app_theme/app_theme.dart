@@ -26,10 +26,10 @@ class AppThemeData {
 
   ThemeData get themeData => ThemeData().copyWith(
     textSelectionTheme: _textSelectionThemeData,
-    inputDecorationTheme: _inputDecorationTheme,
-    snackBarTheme: _snackBarThemeData,
+    // inputDecorationTheme: _inputDecorationTheme,
+    // snackBarTheme: _snackBarThemeData,
     appBarTheme: _appBarTheme,
-    bottomNavigationBarTheme: _bottomNavigationTheme,
+    // bottomNavigationBarTheme: _bottomNavigationTheme,
     extensions: [
       dimen,
       colors,
