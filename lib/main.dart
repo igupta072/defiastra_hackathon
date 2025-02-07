@@ -2,14 +2,23 @@ import 'package:defiastra_hackathon/application.dart';
 import 'package:defiastra_hackathon/util/app_utility.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
 import 'package:okto_sdk/core/sdk_client/sdk_core.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await SdkRepositoryProvider().initialize();
+  if (AppUtility.isIOS) {
+    await Firebase.initializeApp();
+  } else {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyCZFznVvHJputchH59Sa0-CyPBBcLl8kw0",
+            appId: "1:81368794175:android:2887640cf11b1ce32aa48a",
+            messagingSenderId: "81368794175",
+            projectId: "defi-astra"
+        )
+    );
+  }
   await OktoSdk().init(
     OktoCore(
         id: "0x6b6Fad2600Bc57075ee560A6fdF362FfefB9dC3C",
