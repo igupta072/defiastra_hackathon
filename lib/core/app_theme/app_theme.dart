@@ -2,7 +2,14 @@ import 'package:defiastra_hackathon/core/app_assets/app_assets.dart';
 import 'package:defiastra_hackathon/core/app_theme/app_colors.dart';
 import 'package:defiastra_hackathon/core/app_theme/app_dimensions.dart';
 import 'package:defiastra_hackathon/core/app_theme/app_textstyles.dart';
+import 'package:defiastra_hackathon/core/app_theme/base_theme.dart';
 import 'package:flutter/material.dart';
+
+extension AppThemeContextEx on BuildContext {
+  IColors get colors => Theme.of(this).extension<IColors>()!;
+  IDimensions get dimension => Theme.of(this).extension<IDimensions>()!;
+  ITextStyles get textStyles => Theme.of(this).extension<ITextStyles>()!;
+}
 
 @immutable
 class AppThemeData {
