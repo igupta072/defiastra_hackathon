@@ -53,6 +53,7 @@ class GameTable {
     String? status,
     String? tableAmount,
     String? createdAt,
+    String? type,
   }) =>
       GameTable(
         id: id ?? this.id,
@@ -61,6 +62,7 @@ class GameTable {
         status: status ?? this.status,
         tableAmount: tableAmount ?? this.tableAmount,
         createdAt: createdAt ?? this.createdAt,
+        type: type ?? this.type,
       );
 
   Map<String, dynamic> toJson() {
