@@ -8,19 +8,7 @@ import 'package:okto_sdk/okto_flutter_sdk.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //TODO by @Shubham to update this
-  if (AppUtility.isIOS) {
-    await Firebase.initializeApp();
-  } else {
-    await Firebase.initializeApp(
-        options: const FirebaseOptions(
-            apiKey: "",
-            appId: "",
-            messagingSenderId: "",
-            projectId: ""
-        )
-    );
-  }
+  await Firebase.initializeApp();
   await SdkRepositoryProvider().initialize();
   await OktoSdk().init(
     OktoCore(
