@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
+import 'enums.dart';
+
 class AppUtility {
   AppUtility._();
 
@@ -26,5 +28,22 @@ class AppUtility {
 
     final oCcy = NumberFormat(formatter, "en_US");
     return oCcy.format(numberToConvert);
+  }
+
+  static String getBaseUrl(BuildType buildType) {
+    switch(buildType) {
+      case BuildType.production: {
+        return "https://3p.okto.tech";
+      }
+      case BuildType.sandbox: {
+        return "https://sandbox-api.okto.tech";
+      }
+      default:
+        return "https://3p-bff.oktostage.com";
+    }
+  }
+
+  static String getRpcBaseUrl(BuildType buildType) {
+    return "https://okto-gateway.oktostage.com";
   }
 }

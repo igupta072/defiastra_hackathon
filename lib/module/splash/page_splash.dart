@@ -11,6 +11,11 @@ class SplashPage extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
-   return const Scaffold();
+   controller.navigateToHome();
+   return const Scaffold(
+     body: Center(
+
+     ),
+   );
   }
 }
