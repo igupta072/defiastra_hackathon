@@ -13,6 +13,7 @@ class GameTable {
     this.seats,
     this.rounds,
     this.status,
+    this.type,
     this.tableAmount,
     this.createdAt,
   });
@@ -34,6 +35,7 @@ class GameTable {
     status = json['status'];
     tableAmount = json['table_amount'];
     createdAt = json['created_at'];
+    createdAt = json['type'];
   }
 
   String? id;
@@ -42,6 +44,7 @@ class GameTable {
   String? status;
   String? tableAmount;
   String? createdAt;
+  String? type;
 
   GameTable copyWith({
     String? id,
@@ -72,6 +75,7 @@ class GameTable {
     map['status'] = status;
     map['table_amount'] = tableAmount;
     map['created_at'] = createdAt;
+    map['type'] = type;
     return map;
   }
 }
