@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
 
 class AppBloc {
@@ -18,5 +19,7 @@ class AppBloc {
       return false;
     }
   }
+
+  RxDouble balance = 0.0.obs;
 
 }
