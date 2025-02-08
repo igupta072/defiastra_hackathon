@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:defiastra_hackathon/widgets/spinner.dart';
 import 'package:flutter/material.dart';
 
 class CasinoRoulette extends StatefulWidget {
@@ -14,13 +15,11 @@ class CasinoRoulette extends StatefulWidget {
 
 class _CasinoRouletteState extends State<CasinoRoulette>
     with SingleTickerProviderStateMixin {
-  AnimationController? _controller;
-  Animation<double>? _animation;
-  double _currentRotation = 0;
-  bool _isSpinning = false;
-  int _selectedChipValue = 10;
-  final Map<String, List<int>> _bets = {};
+  num _selectedChipValue = 10;
+  final Map<String, List<num>> _bets = {};
   double _balance = 0;
+
+  final MySpinController mySpinController = MySpinController();
 
   // European Roulette numbers and their colors
   final List<RouletteNumber> numbers = [
@@ -45,22 +44,27 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     RouletteNumber(3, Colors.red), RouletteNumber(26, Colors.black),
   ];
 
+
+  @override
+  void dispose() {
+    super.dispose();
+    mySpinController.baseAnimation.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
     _balance = widget.balance;
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    );
-
-    _controller?.addListener(() => setState(() {}));
-    _controller?.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _isSpinning = false;
-        _calculateWinnings();
-      }
+   mySpinController.initLoad(
+      tickerProvider: this,
+      itemList: numbers,
+    ).then((_) {
+      mySpinController.baseAnimation.addListener(() => setState(() {}));
+      mySpinController.baseAnimation.addStatusListener((status) {
+        if (status == AnimationStatus.completed && !mySpinController.xSpinning) {
+          _calculateWinnings();
+        }
+      });
     });
   }
 
@@ -70,7 +74,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
 
     _bets.forEach((betPosition, chips) {
       if (_isBetWinning(betPosition, winningNumber)) {
-        winnings += chips.fold(0, (sum, chip) => sum + chip) *
+        winnings += chips.fold(0, (sum, chip) => (sum + chip).toInt()) *
             _getBetMultiplier(betPosition);
       }
     });
@@ -96,13 +100,11 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   bool _isBetWinning(String betPosition, int winningNumber) {
-    
-    print("INDRAA :: $betPosition :: $winningNumber");
-    
-    if (betPosition.contains('-')) {
-      final numbers = betPosition.split('-').map(int.parse).toList();
-      return numbers.contains(winningNumber);
-    }
+
+    // if (betPosition.contains('-')) {
+    //   final numbers = betPosition.split('-').map(int.parse).toList();
+    //   return numbers.contains(winningNumber);
+    // }
 
     final num = numbers[winningNumber];
 
@@ -134,42 +136,27 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   int _getWinningNumber() {
-    return numbers[luckyNumber];
+    final index = mySpinController.luckyIndex == 0
+        ? 0
+        : (mySpinController.luckyIndex % numbers.length);
+    return numbers[index - 1].number;
   }
 
-  void spinWheel() {
-    if (_isSpinning) return;
+  void spinWheel() async {
+    if (mySpinController.xSpinning) return;
     if (_bets.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Place your bets first!')),
       );
       return;
     }
-
-    setState(() {
-      _isSpinning = true;
-    });
-
-    final Random random = Random();
-    final spins = random.nextInt(3) + 5;
-    final extraAngle = random.nextDouble() * 360;
-    final endRotation = spins * 360 + extraAngle;
-
-    _animation = Tween<double>(
-      begin: _currentRotation,
-      end: _currentRotation + endRotation,
-    ).animate(CurvedAnimation(
-      parent: _controller!,
-      curve: Curves.easeOutCubic,
-    ));
-
-    _currentRotation += endRotation;
-    _controller?.reset();
-    _controller?.forward();
+    int rdm = Random().nextInt(2000);
+    await mySpinController.spinNow(
+        luckyIndex: rdm + 1, totalSpin: 10, baseSpinDuration: 20);
   }
 
   void _placeBet(String position) {
-    if (_isSpinning) return;
+    if (mySpinController.xSpinning) return;
 
     setState(() {
       if (_balance >= _selectedChipValue) {
@@ -191,7 +178,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _buildWheel(),
+        _buildWheel2(),
         const SizedBox(height: 20),
         _buildBettingTable(),
         const SizedBox(height: 20),
@@ -202,50 +189,14 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     );
   }
 
-  Widget _buildWheel() {
-    return SizedBox(
-      height: 350,
-      width: 300,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/ic_arrow_down.png',
-            width: 30,
-            height: 30,
-          ),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Transform.rotate(
-                angle: _animation?.value ?? _currentRotation * (pi / 180),
-                child: CustomPaint(
-                  size: const Size(300, 300),
-                  painter: RoulettePainter(numbers),
-                ),
-              ),
-              Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.amber, width: 2),
-                ),
-              )
-            ],
-          ),
-          // Align(
-          //   alignment: Alignment.topCenter,
-          //   child: Image.asset(
-          //     'assets/images/ic_arrow_down.png',
-          //     width: 30,
-          //     height: 30,
-          //   ),
-          // ),
-        ],
-      ),
+  _buildWheel2() {
+    return MySpinner(
+      mySpinController: mySpinController,
+      onAnimationCompleted: (controller) {
+        _calculateWinnings();
+      },
+      itemList: numbers,
+      wheelSize: 350,
     );
   }
 
@@ -360,19 +311,19 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   Widget _buildChipSelector() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [5, 10, 25, 50, 100].map((value) {
+      children: [0.01, 0.05, 0.1, 0.15, 0.2].map((value) {
         return Padding(
           padding: EdgeInsets.all(4),
           child: GestureDetector(
             onTap: () => setState(() => _selectedChipValue = value),
-            child: _buildChip(value),
+            child: _buildChip((value * 100).toInt()),
           ),
         );
       }).toList(),
     );
   }
 
-  Widget _buildChip(int value) {
+  Widget _buildChip(num value) {
     return Container(
       width: 40,
       height: 40,
@@ -411,16 +362,16 @@ class _CasinoRouletteState extends State<CasinoRoulette>
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
-              onPressed: _isSpinning ? null : spinWheel,
+              onPressed: mySpinController.xSpinning ? null : spinWheel,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               ),
-              child: Text(_isSpinning ? 'Spinning...' : 'SPIN!'),
+              child: Text(mySpinController.xSpinning ? 'Spinning...' : 'SPIN!'),
             ),
             ElevatedButton(
-              onPressed: _isSpinning
+              onPressed: mySpinController.xSpinning
                   ? null
                   : () {
                       setState(() {
@@ -440,11 +391,6 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     );
   }
 
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
 }
 
 class RouletteNumber {

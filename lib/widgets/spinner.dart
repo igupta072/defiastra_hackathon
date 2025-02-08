@@ -7,13 +7,13 @@ class MySpinner extends StatefulWidget {
   final MySpinController mySpinController;
   final List<RouletteNumber> itemList;
   final double wheelSize;
-  final Function(void) onFinished;
+  final void Function(AnimationController) onAnimationCompleted;
   const MySpinner({
     Key? key,
     required this.mySpinController,
-    required this.onFinished,
     required this.itemList,
     required this.wheelSize,
+    required this.onAnimationCompleted
   }) : super(key: key);
 
   @override
@@ -22,20 +22,23 @@ class MySpinner extends StatefulWidget {
 
 class _MySpinnerState extends State<MySpinner> with TickerProviderStateMixin{
 
-  @override
-  void initState() {
-    super.initState();
-    widget.mySpinController.initLoad(
-      tickerProvider: this,
-      itemList: widget.itemList,
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    null;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   widget.mySpinController.initLoad(
+  //     tickerProvider: this,
+  //     itemList: widget.itemList,
+  //   ).then((_) {
+  //     widget.mySpinController.baseAnimation.addListener(() => setState(() {}));
+  //     widget.mySpinController.baseAnimation.addStatusListener((status) {
+  //       if (status == AnimationStatus.completed) {
+  //         print("INDRAA :: $status");
+  //         widget.mySpinController.xSpinning = false;
+  //         widget.onAnimationCompleted(widget.mySpinController.baseAnimation);
+  //       }
+  //     });
+  //   });
+  // }
 
 
   @override
@@ -47,9 +50,9 @@ class _MySpinnerState extends State<MySpinner> with TickerProviderStateMixin{
           margin: const EdgeInsets.only(top: 15),
           alignment: Alignment.center,
           child: AnimatedBuilder(
-            animation: widget.mySpinController._baseAnimation,
+            animation: widget.mySpinController.baseAnimation,
             builder: (context, child) {
-              double value = widget.mySpinController._baseAnimation.value;
+              double value = widget.mySpinController.baseAnimation.value;
               double rotationValue = (360 * value);
               return RotationTransition(
                 turns: AlwaysStoppedAnimation( rotationValue / 360 ),
@@ -114,10 +117,11 @@ class _MySpinnerState extends State<MySpinner> with TickerProviderStateMixin{
 
 class MySpinController{
 
-  late AnimationController _baseAnimation;
+  late AnimationController baseAnimation;
   late TickerProvider _tickerProvider;
-  bool _xSpinning = false;
+  bool xSpinning = false;
   List<RouletteNumber> _itemList = [];
+  int luckyIndex = 0;
 
   Future<void> initLoad({
     required TickerProvider tickerProvider,
@@ -129,7 +133,7 @@ class MySpinController{
   }
 
   Future<void> setAnimations(TickerProvider tickerProvider) async{
-    _baseAnimation = AnimationController(
+    baseAnimation = AnimationController(
       vsync: tickerProvider,
       duration: const Duration(milliseconds: 200),
     );
@@ -140,7 +144,7 @@ class MySpinController{
     int totalSpin = 10,
     int baseSpinDuration = 100
   }) async{
-
+    this.luckyIndex = luckyIndex;
     //getWhereToStop
     int itemsLength = _itemList.length;
     int factor = luckyIndex % itemsLength;
@@ -148,26 +152,27 @@ class MySpinController{
     double spinInterval = 1 / itemsLength;
     double target = 1 - ( (spinInterval * factor) - (spinInterval/2));
 
-    if(!_xSpinning){
-      _xSpinning = true;
+    if(!xSpinning){
+      xSpinning = true;
       int spinCount = 0;
 
       do{
-        _baseAnimation.reset();
-        _baseAnimation.duration = Duration(milliseconds: baseSpinDuration);
+        baseAnimation.reset();
+        baseAnimation.duration = Duration(milliseconds: baseSpinDuration);
         if(spinCount == totalSpin){
-          await _baseAnimation.animateTo(target);
+          xSpinning = false;
+          await baseAnimation.animateTo(target);
         }
         else{
-          await _baseAnimation.forward();
+          await baseAnimation.forward();
         }
         baseSpinDuration = baseSpinDuration + 50;
-        _baseAnimation.duration = Duration(milliseconds: baseSpinDuration);
+        baseAnimation.duration = Duration(milliseconds: baseSpinDuration);
         spinCount++;
       }
       while(spinCount <= totalSpin);
 
-      _xSpinning = false;
+      xSpinning = false;
     }
   }
 

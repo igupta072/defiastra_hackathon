@@ -441,7 +441,7 @@
     },
     {
       "name": "okto_sdk",
-      "rootUri": "file:///Users/indrajeet.gupta/.pub-cache/git/okto-flutter-sdk-monorepo-a3a659eb4e146cfe4e157143e1bd9cc29d8bbc71/okto_flutter_sdk",
+      "rootUri": "file:///Users/indrajeet.gupta/Desktop/Indrozz/Projects/okto-flutter-sdk-monorepo/okto_flutter_sdk",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -764,7 +764,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-02-08T06:27:59.385117Z",
+  "generated": "2025-02-08T11:05:40.213138Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///Users/indrajeet.gupta/Desktop/Indrozz/flutter",
