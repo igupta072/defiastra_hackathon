@@ -78,7 +78,7 @@ class TokenPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(
-      "assets/svg_assets/token_placeholder.svg",
+      "assets/images/token_placeholder.svg",
       height: height ?? 56.r,
       width: width ?? 56.r,
     );
