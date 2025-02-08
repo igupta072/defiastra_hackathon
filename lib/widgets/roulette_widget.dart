@@ -136,7 +136,9 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     final anglePerNumber = 360.0 / numbers.length;
     final rawStoppingAngle = (_currentRotation % 360);
     final normalizedAngle = (360 - rawStoppingAngle) % 360;
-    return (normalizedAngle ~/ anglePerNumber);
+    final winningNumber =  (normalizedAngle ~/ anglePerNumber);
+    print("Angle per number: $anglePerNumber, Raw stopping angle: $rawStoppingAngle normalize angle: $normalizedAngle winning number: $winningNumber");
+    return winningNumber;
   }
 
   void spinWheel() {
@@ -270,13 +272,13 @@ class _CasinoRouletteState extends State<CasinoRoulette>
         crossAxisSpacing: 2,
         mainAxisSpacing: 2,
       ),
-      itemCount: 4,
+      itemCount: 39,
       // 0-36 plus 2 empty cells
       itemBuilder: (context, index) {
         if (index == 0) {
           return _buildBettingCell('0', Colors.green);
         }
-        if (index < 5) {
+        if (index < 37) {
           final number = numbers.firstWhere((n) => n.number == index);
           return _buildBettingCell(
             index.toString(),
