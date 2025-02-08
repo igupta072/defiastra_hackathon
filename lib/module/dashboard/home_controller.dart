@@ -6,10 +6,14 @@ import 'package:defiastra_hackathon/network/model/game_table.dart';
 import 'package:defiastra_hackathon/network/model/player.dart';
 import 'package:defiastra_hackathon/util/app_utility.dart';
 import 'package:get/get.dart';
+import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
+import 'package:okto_sdk/core/sdk_client/sdk_core.dart';
 import 'package:okto_sdk/network/models/portfolio_data_v2.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
 
 class HomeController extends GetxController {
+  
+  late  OktoCoreClient host;
 
   late final player = Player(
       id: OktoSdk().oktoUserClient?.client.swa,

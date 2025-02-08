@@ -35,7 +35,7 @@ class AppRoutes {
 
     GetPage(
         name: RoulettePage.route,
-        page: () =>  const RoulettePage(),
+        page: () =>  RoulettePage(),
         binding: BindingsBuilder(() {
           Get.put(RouletteController(gameArgs: Get.arguments as GameTableArgument));
         })),

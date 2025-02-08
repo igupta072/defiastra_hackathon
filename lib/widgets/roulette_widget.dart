@@ -96,6 +96,9 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   bool _isBetWinning(String betPosition, int winningNumber) {
+    
+    print("INDRAA :: $betPosition :: $winningNumber");
+    
     if (betPosition.contains('-')) {
       final numbers = betPosition.split('-').map(int.parse).toList();
       return numbers.contains(winningNumber);
@@ -131,10 +134,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   int _getWinningNumber() {
-    final anglePerNumber = 360.0 / numbers.length;
-    final rawStoppingAngle = (_currentRotation % 360);
-    final normalizedAngle = (360 - rawStoppingAngle) % 360;
-    return (normalizedAngle ~/ anglePerNumber);
+    return numbers[luckyNumber];
   }
 
   void spinWheel() {
