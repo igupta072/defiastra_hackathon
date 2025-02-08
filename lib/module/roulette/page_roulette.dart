@@ -59,7 +59,7 @@ class RoulettePage extends GetView<RouletteController> {
                 try {
                   controller.transferWinningFunds(0.01);
                 } catch (e) {
-                  _showWinningDialog(context, )
+
                 }
               } else {
 
