@@ -37,6 +37,7 @@ class HomeController extends GetxController {
 
   @override
   onInit() {
+    getWallets();
     _fetchPortfolio();
     super.onInit();
   }
@@ -71,7 +72,8 @@ class HomeController extends GetxController {
 
   Future<void> getWallets() async {
     OktoSdk().oktoUserClient?.getWallets().then((wallet) {
-      print(wallet.toJson());
+      final token = wallet.wallets?.firstWhereOrNull((w) => w.networkName?.toLowerCase() == "polygon");
+      player.id = token?.address ?? wallet.wallets?.firstOrNull?.address;
     }).onError((e, s) {
       print("$e $s");
     });
@@ -99,18 +101,5 @@ class HomeController extends GetxController {
           player: player
       )
     );
-  }
-
-  Future<String> transferWinningFunds(num amount) {
-    try {
-      return CryptoUtility.transferFunds(
-          privateKey: "4af7746b7a3dedfb07f99702088469a74363be6d3bdf6de7a7cdbf5abbf1c68e",
-          recipientAddress: "0xbF803aeE0aC4E3fB8472E8fF97CF8a9f7ffb2e55",
-          amount: amount,
-          url: "https://polygon-rpc.com"
-      );
-    } catch (e, s) {
-      rethrow;
-    }
   }
 }

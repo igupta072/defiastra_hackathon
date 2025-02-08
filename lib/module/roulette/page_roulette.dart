@@ -56,6 +56,13 @@ class RoulettePage extends GetView<RouletteController> {
             CasinoRoulette(balance: 1000.0, onRoundComplete: (hasWon, amount) async {
               if(hasWon) {
                 _showWinningDialog(context, amount.toDouble());
+                try {
+                  controller.transferWinningFunds(0.01);
+                } catch (e) {
+                  _showWinningDialog(context, )
+                }
+              } else {
+
               }
               await controller.updateRound(hasWon);
               controller.roundAmount = amount;
@@ -70,7 +77,7 @@ class RoulettePage extends GetView<RouletteController> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Congratulations!'),
-        content: Text('You won \$${winnings.toStringAsFixed(2)}!'),
+        content: Text('You won \$${winnings.toStringAsFixed(2)}! \nWinning amount will be credited soon.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

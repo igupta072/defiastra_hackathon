@@ -25,8 +25,7 @@ class HomePage extends GetView<HomeController> {
         actions: [
           IconButton(
             onPressed: () {
-              // controller.onGetWalletClicked();
-              controller.transferWinningFunds(0.01);
+              controller.onGetWalletClicked();
             },
             icon: Icon(
               size: 24.r,
