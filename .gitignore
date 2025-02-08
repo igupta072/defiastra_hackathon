@@ -31,3 +31,9 @@ android/app/google-services.json
 
 # Android Profiling
 *.hprof
+
+*.stamp
+*.filecache
+*.flutter-plugins-dependencies
+*.dill
+*.d
