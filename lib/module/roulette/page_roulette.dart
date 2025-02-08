@@ -1,13 +1,13 @@
 import 'package:defiastra_hackathon/module/roulette/roulette_controller.dart';
+import 'package:defiastra_hackathon/widgets/roulette_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/roulette_widget.dart';
-
-class PageRoulette extends GetView<RouletteController> {
+class RoulettePage extends GetView<RouletteController> {
 
   static const String route = '/roulette';
+
+  const RoulettePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +19,13 @@ class PageRoulette extends GetView<RouletteController> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CasinoRoulette(balance: 1000.0, onRoundComplete: (hasWon, amount) {
+            CasinoRoulette(balance: 1000.0, onRoundComplete: (hasWon, amount) async {
               if(hasWon) {
                 _showWinningDialog(context, amount.toDouble());
               }
+              await controller.updateRound(hasWon);
+              controller.roundAmount = amount;
+              await controller.updateGameTableAmount();
             },)
           ],
         ));

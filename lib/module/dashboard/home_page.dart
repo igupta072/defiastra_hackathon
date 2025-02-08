@@ -22,7 +22,7 @@ class HomePage extends GetView<HomeController> {
               AppButton.primary(
                   title: "Start roulette",
                   onPressed: () {
-                    Get.toNamed(PageRoulette.route);
+                    Get.toNamed(RoulettePage.route);
                   })
             ]));
   }

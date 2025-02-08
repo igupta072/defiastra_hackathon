@@ -32,8 +32,8 @@ class AppRoutes {
         })),
 
     GetPage(
-        name: PageRoulette.route,
-        page: () =>  PageRoulette(),
+        name: RoulettePage.route,
+        page: () =>  RoulettePage(),
         binding: BindingsBuilder(() {
           Get.put(RouletteController());
         })),

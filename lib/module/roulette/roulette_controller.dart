@@ -15,40 +15,76 @@ class RouletteController extends GetxController {
       hasLeft: false,
       isActive: true);
 
-  Future<void> addToGameTable() async {
+  final Rx<GameTable?> _gameTable = Rx(null);
+  int _roundNumber = 0;
+  num roundAmount = 0;
+
+  @override
+  void onInit() async {
+    _gameTable.value = await addToGameTable();
+    super.onInit();
+  }
+
+  Future<GameTable> addToGameTable() async {
     try {
-      SdkRepositoryProvider()
+      final gt =  await SdkRepositoryProvider()
           .provide<GameRepository>()
           .firebaseGameService
           .addToGameTable(player: player, type: GameTableType.roulette);
+
+      return gt;
+    } catch (e, s) {
+      print(e);
+      print(s);
+      rethrow;
+    }
+  }
+
+  Future<void> updateRound(bool isWon) async {
+    try {
+      await SdkRepositoryProvider()
+          .provide<GameRepository>()
+          .firebaseGameService
+          .updateRound(
+              tableId: _gameTable.value!.id!,
+              round: Rounds(rn: ++_roundNumber, won: isWon ? player : null));
     } catch (e, s) {
       print(e);
       print(s);
     }
   }
 
-  Future<void> updateRound(String tableId, Rounds round) async {
+  Future<void> updateGameTableStatus() async {
     try {
       await SdkRepositoryProvider()
           .provide<GameRepository>()
           .firebaseGameService
-          .updateRound(tableId: tableId, round: round);
+          .updateTableStatus(
+              tableId: _gameTable.value!.id!,
+              status: GameTableStatus.completed);
     } catch (e, s) {
       print(e);
       print(s);
     }
   }
 
-  Future<void> updateGameTableStatus(
-      String tableId, GameTableStatus status) async {
+  Future<void> updateGameTableAmount() async {
     try {
       await SdkRepositoryProvider()
           .provide<GameRepository>()
           .firebaseGameService
-          .updateTableStatus(tableId: tableId, status: status);
+          .updateAmount(
+          tableId: _gameTable.value!.id!,
+          amount: roundAmount);
     } catch (e, s) {
       print(e);
       print(s);
     }
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    updateGameTableStatus();
   }
 }

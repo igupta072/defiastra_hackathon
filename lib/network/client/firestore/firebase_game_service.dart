@@ -59,7 +59,7 @@ class FirebaseGameService extends IFirebaseDatabaseService {
     try {
 
       await collectionRef.doc(tableId).update({
-        "amount" : FieldValue.increment(amount)
+        "table_amount" : FieldValue.increment(amount)
       });
 
     } catch(e) {
