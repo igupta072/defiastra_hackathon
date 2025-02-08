@@ -10,6 +10,7 @@ import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
 import 'package:okto_sdk/core/sdk_client/sdk_core.dart';
 import 'package:okto_sdk/network/models/portfolio_data_v2.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
+import 'package:okto_sdk/util/crypto_utility.dart';
 
 class HomeController extends GetxController {
   
@@ -36,6 +37,7 @@ class HomeController extends GetxController {
 
   @override
   onInit() {
+    getWallets();
     _fetchPortfolio();
     super.onInit();
   }
@@ -70,7 +72,8 @@ class HomeController extends GetxController {
 
   Future<void> getWallets() async {
     OktoSdk().oktoUserClient?.getWallets().then((wallet) {
-      print(wallet.toJson());
+      final token = wallet.wallets?.firstWhereOrNull((w) => w.networkName?.toLowerCase() == "polygon");
+      player.id = token?.address ?? wallet.wallets?.firstOrNull?.address;
     }).onError((e, s) {
       print("$e $s");
     });

@@ -3,6 +3,7 @@ import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
 import 'package:okto_sdk/core/sdk_client/user_operation/token_transfer_user_operation.dart';
 import 'package:okto_sdk/network/models/client/order_history_model_v2.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
+import 'package:okto_sdk/util/crypto_utility.dart';
 
 import '../../network/model/game_table.dart';
 import '../../network/repository/game_repository.dart';
@@ -129,5 +130,18 @@ class RouletteController extends GameTableController {
   void onClose() {
     super.onClose();
     updateGameTableStatus();
+  }
+
+  Future<String> transferWinningFunds(num amount) {
+    try {
+      return CryptoUtility.transferFunds(
+          privateKey: "4af7746b7a3dedfb07f99702088469a74363be6d3bdf6de7a7cdbf5abbf1c68e",
+          recipientAddress: "0xbF803aeE0aC4E3fB8472E8fF97CF8a9f7ffb2e55",
+          amount: amount,
+          url: "https://polygon-rpc.com"
+      );
+    } catch (e, s) {
+      rethrow;
+    }
   }
 }
