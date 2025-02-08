@@ -1,5 +1,3 @@
-import 'package:defiastra_hackathon/module/dashboard/home_page.dart';
-import 'package:defiastra_hackathon/module/roulette/page_roulette.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:okto_sdk/network/models/portfolio_data_v2.dart';

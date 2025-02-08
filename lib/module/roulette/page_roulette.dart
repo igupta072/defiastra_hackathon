@@ -14,6 +14,9 @@ class RoulettePage extends GetView<RouletteController> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Lobby'),
+          actions: [
+            Text(controller.gameArgs.token.balance ?? '0', style: TextStyle(),)
+          ],
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
