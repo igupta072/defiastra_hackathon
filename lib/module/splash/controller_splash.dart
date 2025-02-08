@@ -26,6 +26,7 @@ class SplashController extends GetxController {
 
   void _toHome() async {
     Get.toNamed(HomePage.routeName);
+    // Get.offAllNamed(LoginPage.routeName);
     // if(await AppBloc().isLoggedIn() ) {
     //   Get.toNamed(HomePage.routeName);
     // } else {
