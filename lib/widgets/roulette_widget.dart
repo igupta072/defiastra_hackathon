@@ -1,8 +1,5 @@
 import 'dart:math';
-import 'package:defiastra_hackathon/util/app_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 class CasinoRoulette extends StatefulWidget {
   final double balance;
@@ -23,6 +20,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   bool _isSpinning = false;
   int _selectedChipValue = 10;
   final Map<String, List<int>> _bets = {};
+  double _balance = 0;
 
   // European Roulette numbers and their colors
   final List<RouletteNumber> numbers = [
@@ -50,7 +48,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   @override
   void initState() {
     super.initState();
-    AppBloc().balance.value = widget.balance;
+    _balance = widget.balance;
 
     _controller = AnimationController(
       vsync: this,
@@ -78,7 +76,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     });
 
     setState(() {
-      AppBloc().balance.value += winnings;
+      _balance += winnings;
       if (winnings > 0) {
         widget.onRoundComplete(true, winnings);
       } else {
@@ -98,6 +96,9 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   bool _isBetWinning(String betPosition, int winningNumber) {
+    
+    print("INDRAA :: $betPosition :: $winningNumber");
+    
     if (betPosition.contains('-')) {
       final numbers = betPosition.split('-').map(int.parse).toList();
       return numbers.contains(winningNumber);
@@ -133,12 +134,8 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   int _getWinningNumber() {
-    final anglePerNumber = 360.0 / numbers.length;
-    final rawStoppingAngle = (_currentRotation % 360);
-    final normalizedAngle = (360 - rawStoppingAngle) % 360;
-    final winningNumber =  (normalizedAngle ~/ anglePerNumber);
-    print("Angle per number: $anglePerNumber, Raw stopping angle: $rawStoppingAngle normalize angle: $normalizedAngle winning number: $winningNumber");
-    return winningNumber;
+    // return numbers[luckyNumber];
+    return 0;
   }
 
   void spinWheel() {
@@ -176,8 +173,8 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     if (_isSpinning) return;
 
     setState(() {
-      if (AppBloc().balance.value >= _selectedChipValue) {
-        AppBloc().balance.value -= _selectedChipValue;
+      if (_balance >= _selectedChipValue) {
+        _balance -= _selectedChipValue;
         if (_bets.containsKey(position)) {
           _bets[position]!.add(_selectedChipValue);
         } else {
@@ -196,11 +193,11 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     return Column(
       children: [
         _buildWheel(),
-        SizedBox(height: 10.r),
+        const SizedBox(height: 20),
         _buildBettingTable(),
-        SizedBox(height: 10.r),
+        const SizedBox(height: 20),
         _buildChipSelector(),
-        SizedBox(height: 10.r),
+        const SizedBox(height: 20),
         _buildControlPanel(),
       ],
     );
@@ -239,7 +236,15 @@ class _CasinoRouletteState extends State<CasinoRoulette>
                 ),
               )
             ],
-          )
+          ),
+          // Align(
+          //   alignment: Alignment.topCenter,
+          //   child: Image.asset(
+          //     'assets/images/ic_arrow_down.png',
+          //     width: 30,
+          //     height: 30,
+          //   ),
+          // ),
         ],
       ),
     );
@@ -329,25 +334,15 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   Widget _buildSpecialBets() {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildSpecialBetButton('1-18', Colors.blue),
-            _buildSpecialBetButton('Even', Colors.blue),
-            _buildSpecialBetButton('Red', Colors.red),
-          ],
-        ),
-        SizedBox(height: 4.r,),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildSpecialBetButton('Black', Colors.black),
-            _buildSpecialBetButton('Odd', Colors.blue),
-            _buildSpecialBetButton('19-36', Colors.blue),
-          ],
-        ),
+        _buildSpecialBetButton('1-18', Colors.blue),
+        _buildSpecialBetButton('Even', Colors.blue),
+        _buildSpecialBetButton('Red', Colors.red),
+        _buildSpecialBetButton('Black', Colors.black),
+        _buildSpecialBetButton('Odd', Colors.blue),
+        _buildSpecialBetButton('19-36', Colors.blue),
       ],
     );
   }
@@ -381,7 +376,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   Widget _buildChip(int value) {
     return Container(
       width: 40,
-      height: 36,
+      height: 40,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: _selectedChipValue == value ? Colors.yellow : Colors.white,
@@ -406,6 +401,13 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        Text(
+          'Balance: \$${_balance.toStringAsFixed(2)}',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -424,7 +426,6 @@ class _CasinoRouletteState extends State<CasinoRoulette>
                   : () {
                       setState(() {
                         _bets.clear();
-                        AppBloc().balance.value = widget.balance;
                       });
                     },
               style: ElevatedButton.styleFrom(
