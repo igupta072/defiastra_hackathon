@@ -1,9 +1,8 @@
+import 'package:defiastra_hackathon/module/common/app_button.dart';
 import 'package:defiastra_hackathon/module/dashboard/home_controller.dart';
+import 'package:defiastra_hackathon/module/roulette/page_roulette.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-
-import '../../widgets/roulette_widget.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
@@ -14,35 +13,17 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Home'),
+          title: const Text('Lobby'),
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CasinoRoulette(balance: 1000.0, onRoundComplete: (hasWon, amount) {
-              if(hasWon) {
-                _showWinningDialog(context, amount.toDouble());
-              }
-            },)
-          ],
-        ));
-  }
-
-
-  void _showWinningDialog(BuildContext context, double winnings) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Congratulations!'),
-        content: Text('You won \$${winnings.toStringAsFixed(2)}!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              AppButton.primary(
+                  title: "Start roulette",
+                  onPressed: () {
+                    Get.toNamed(PageRoulette.route);
+                  })
+            ]));
   }
 }

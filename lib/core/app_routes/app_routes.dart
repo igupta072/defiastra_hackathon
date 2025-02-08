@@ -1,5 +1,7 @@
 import 'package:defiastra_hackathon/module/dashboard/home_controller.dart';
 import 'package:defiastra_hackathon/module/dashboard/home_page.dart';
+import 'package:defiastra_hackathon/module/roulette/page_roulette.dart';
+import 'package:defiastra_hackathon/module/roulette/roulette_controller.dart';
 import 'package:defiastra_hackathon/module/signin/login_controller.dart';
 import 'package:defiastra_hackathon/module/signin/login_page.dart';
 import 'package:defiastra_hackathon/module/splash/controller_splash.dart';
@@ -27,6 +29,13 @@ class AppRoutes {
         page: () => const LoginPage(),
         binding: BindingsBuilder(() {
           Get.put(LoginController());
+        })),
+
+    GetPage(
+        name: PageRoulette.route,
+        page: () =>  PageRoulette(),
+        binding: BindingsBuilder(() {
+          Get.put(RouletteController());
         })),
   ];
 }
