@@ -1,3 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:defiastra_hackathon/application.dart';
+import 'package:defiastra_hackathon/core/app_theme/app_theme.dart';
 import 'package:defiastra_hackathon/module/common/app_button.dart';
 import 'package:defiastra_hackathon/module/dashboard/home_controller.dart';
 import 'package:defiastra_hackathon/module/roulette/page_roulette.dart';
@@ -17,34 +20,50 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Lobby'),
-        ),
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              AppButton.primary(
-                  title: "Start roulette",
-                  onPressed: () {
-                    Get.toNamed(RoulettePage.route);
-                  }),
-              SizedBox(height: 20.r,),
-
-              AppButton.primary(
-                  title: "Selected token",
-                  onPressed: () {
-                    controller.showTokenBottomSheet();
-                  }),
-
-              SizedBox(height: 32.r,),
-
-              AppButton.primary(
-                  title: "Get wallets",
-                  onPressed: () {
-                    controller.onGetWalletClicked();
-                  })
-            ]));
+      appBar: AppBar(
+        title: const Text('Lobby'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              controller.onGetWalletClicked();
+            },
+            icon: Icon(
+              size: 24.r,
+              Icons.wallet,
+              color: context.colors.surface1,
+            )
+          )
+        ],
+      ),
+      body: ListView.separated(
+        padding: EdgeInsets.all(16.r),
+        itemCount: controller.games.length,
+        separatorBuilder: (_, __) => SizedBox(height: 16.r,),
+        itemBuilder: (_, i) {
+          final game = controller.games[i];
+          return InkWell(
+            onTap: () {
+              controller.showTokenBottomSheet().then((token) {
+                controller.onGameSelected(game, token);
+              });
+            },
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.r)
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.r),
+                child: CachedNetworkImage(
+                  imageUrl: game.image ?? '',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          );
+        },
+      )
+    );
   }
 }
 
@@ -58,54 +77,51 @@ class CryptoListWidget extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     // final VendorTheme theme = Theme.of(context).extension<VendorTheme>()!;
-    return Container(
-      // color: theme.backgroundColor,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          (itemList.isEmpty)
-              ? Column(
-            children: [
-              Image.asset(
-                "assets/images/empty_state_crypto.png",
-                height: 144.h,
-                width: 144.h,
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Text(
-                "Your crypto lives here",
-                // style: OktoTextStyle.title3(theme.textPrimaryColor),
-              ),
-              SizedBox(
-                height: 8.h,
-              ),
-              Text(
-                "Nothing to see here",
-                // style: OktoTextStyle.body3(theme.textSecondaryColor),
-              ),
-            ],
-          )
-              : ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => SizedBox(
-                height: 32.h,
-              ),
-              shrinkWrap: true,
-              itemCount: itemList.length,
-              itemBuilder: (context, idx) {
-                GroupTokensV2 tokenItem = itemList[idx];
-                return InkWell(
-                    onTap: () => onItemTap?.call(tokenItem),
-                    child: CryptoListItem(itemModel: tokenItem));
-              }),
-          SizedBox(
-            height: 10.h,
-            width: double.infinity,
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        (itemList.isEmpty)
+            ? Column(
+          children: [
+            Image.asset(
+              "assets/images/empty_state_crypto.png",
+              height: 144.h,
+              width: 144.h,
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            Text(
+              "Your crypto lives here",
+              // style: OktoTextStyle.title3(theme.textPrimaryColor),
+            ),
+            SizedBox(
+              height: 8.h,
+            ),
+            Text(
+              "Nothing to see here",
+              // style: OktoTextStyle.body3(theme.textSecondaryColor),
+            ),
+          ],
+        )
+            : ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (context, index) => SizedBox(
+              height: 32.h,
+            ),
+            shrinkWrap: true,
+            itemCount: itemList.length,
+            itemBuilder: (context, idx) {
+              GroupTokensV2 tokenItem = itemList[idx];
+              return InkWell(
+                  onTap: () => onItemTap?.call(tokenItem),
+                  child: CryptoListItem(itemModel: tokenItem));
+            }),
+        SizedBox(
+          height: 10.h,
+          width: double.infinity,
+        ),
+      ],
     );
   }
 }
@@ -150,3 +166,26 @@ class CryptoListItem extends GetView<HomeController> {
     );
   }
 }
+
+/*
+AppButton.primary(
+                  title: "Start roulette",
+                  onPressed: () {
+                    Get.toNamed(RoulettePage.route);
+                  }),
+              SizedBox(height: 20.r,),
+
+              AppButton.primary(
+                  title: "Selected token",
+                  onPressed: () {
+                    controller.showTokenBottomSheet();
+                  }),
+
+              SizedBox(height: 32.r,),
+
+              AppButton.primary(
+                  title: "Get wallets",
+                  onPressed: () {
+                    controller.onGetWalletClicked();
+                  })
+ */

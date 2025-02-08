@@ -1,3 +1,5 @@
+import 'package:defiastra_hackathon/module/dashboard/game_table_argument.dart';
+import 'package:defiastra_hackathon/module/dashboard/game_table_controller.dart';
 import 'package:defiastra_hackathon/module/dashboard/home_controller.dart';
 import 'package:defiastra_hackathon/module/dashboard/home_page.dart';
 import 'package:defiastra_hackathon/module/roulette/page_roulette.dart';
@@ -33,9 +35,9 @@ class AppRoutes {
 
     GetPage(
         name: RoulettePage.route,
-        page: () =>  RoulettePage(),
+        page: () =>  const RoulettePage(),
         binding: BindingsBuilder(() {
-          Get.put(RouletteController());
+          Get.put(RouletteController(gameArgs: Get.arguments as GameTableArgument));
         })),
   ];
 }

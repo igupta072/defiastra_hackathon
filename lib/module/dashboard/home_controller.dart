@@ -1,12 +1,34 @@
+import 'package:defiastra_hackathon/module/dashboard/game_model.dart';
+import 'package:defiastra_hackathon/module/dashboard/game_table_argument.dart';
 import 'package:defiastra_hackathon/module/dashboard/token_select_bottomsheet.dart';
+import 'package:defiastra_hackathon/module/roulette/page_roulette.dart';
+import 'package:defiastra_hackathon/network/model/game_table.dart';
+import 'package:defiastra_hackathon/network/model/player.dart';
 import 'package:defiastra_hackathon/util/app_utility.dart';
 import 'package:get/get.dart';
 import 'package:okto_sdk/network/models/portfolio_data_v2.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
 
 class HomeController extends GetxController {
-  RxList<GroupTokensV2> cryptoTokens = <GroupTokensV2>[].obs;
-  Rx<AggregatedDataV2> aggregatedData = AggregatedDataV2().obs;
+
+  late final player = Player(
+      id: OktoSdk().oktoUserClient?.client.swa,
+      username: "Indrozz",
+      avatar: "https://cdn-icons-png.flaticon.com/512/6858/6858504.png",
+      hasLeft: false,
+      isActive: true);
+
+  final List<GameModel> games = [
+    GameModel(
+      image: "https://res.cloudinary.com/kalispel/image/upload/f_auto,q_auto/v1714690433/Craft%20Images/Roulette_header_2750x1600_jsg1ap.jpg",
+      name: "Classic Roulette",
+      gameId: "1",
+      gameType: GameTableType.roulette.name
+    )
+  ];
+
+  final RxList<GroupTokensV2> cryptoTokens = <GroupTokensV2>[].obs;
+  final Rx<AggregatedDataV2> aggregatedData = AggregatedDataV2().obs;
 
   @override
   onInit() {
@@ -50,8 +72,9 @@ class HomeController extends GetxController {
     });
   }
 
-  void showTokenBottomSheet() {
-    Get.bottomSheet(TokenSelectBottomsheet(allTokenList: cryptoTokens));
+  Future<GroupTokensV2?> showTokenBottomSheet() {
+    return Get.bottomSheet<GroupTokensV2?>(
+        TokenSelectBottomsheet(allTokenList: cryptoTokens));
   }
 
   void onGetWalletClicked() {
@@ -60,5 +83,16 @@ class HomeController extends GetxController {
     }).onError((e, s) {
 
     });
+  }
+
+  void onGameSelected(GameModel game, GroupTokensV2? token) {
+    if (token == null) return;
+    Get.toNamed(
+      RoulettePage.route,
+      arguments: GameTableArgument(
+          token: token,
+          player: player
+      )
+    );
   }
 }

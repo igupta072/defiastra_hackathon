@@ -1,3 +1,4 @@
+import 'package:defiastra_hackathon/module/dashboard/game_table_controller.dart';
 import 'package:get/get.dart';
 import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
@@ -6,18 +7,13 @@ import '../../network/model/game_table.dart';
 import '../../network/model/player.dart';
 import '../../network/repository/game_repository.dart';
 
-class RouletteController extends GetxController {
-
-  late final player = Player(
-      id: OktoSdk().oktoUserClient?.client.swa,
-      username: "Indrozz",
-      avatar: "https://cdn-icons-png.flaticon.com/512/6858/6858504.png",
-      hasLeft: false,
-      isActive: true);
+class RouletteController extends GameTableController {
 
   final Rx<GameTable?> _gameTable = Rx(null);
   int _roundNumber = 0;
   num roundAmount = 0;
+
+  RouletteController({required super.gameArgs});
 
   @override
   void onInit() async {
@@ -30,7 +26,7 @@ class RouletteController extends GetxController {
       final gt =  await SdkRepositoryProvider()
           .provide<GameRepository>()
           .firebaseGameService
-          .addToGameTable(player: player, type: GameTableType.roulette);
+          .addToGameTable(player: gameArgs.player, type: GameTableType.roulette);
 
       return gt;
     } catch (e, s) {
@@ -47,7 +43,7 @@ class RouletteController extends GetxController {
           .firebaseGameService
           .updateRound(
               tableId: _gameTable.value!.id!,
-              round: Rounds(rn: ++_roundNumber, won: isWon ? player : null));
+              round: Rounds(rn: ++_roundNumber, won: isWon ? gameArgs.player : null));
     } catch (e, s) {
       print(e);
       print(s);

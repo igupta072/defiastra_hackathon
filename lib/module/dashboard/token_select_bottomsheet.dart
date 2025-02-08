@@ -61,20 +61,8 @@ class TokenSelectBottomsheet extends GetView<TokenSelectController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "YOUR TOKENS",
-                            // style: OktoTextStyle.callout1(
-                            //     theme.textSecondaryColor),
-                          ),
-                          Text(
-                            "WEB3 BALANCE",
-                            // style: OktoTextStyle.callout1(
-                            //     theme.textSecondaryColor),
-                          )
-                        ],
+                      const Text(
+                        "YOUR TOKENS",
                       ),
                       SizedBox(
                         height: 20.r,
