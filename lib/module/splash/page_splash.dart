@@ -13,7 +13,6 @@ class SplashPage extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
-   // controller.navigateToHome();
    return Scaffold(
      body: Column(
        mainAxisSize: MainAxisSize.max,

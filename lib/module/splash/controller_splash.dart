@@ -9,6 +9,12 @@ import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
 
 class SplashController extends GetxController {
 
+  @override
+  void onInit() {
+    super.onInit();
+    navigateToHome();
+  }
+
   void navigateToHome() {
     Future.delayed(
       const Duration(seconds: 3), // Change the duration as needed
@@ -19,10 +25,11 @@ class SplashController extends GetxController {
   }
 
   void _toHome() async {
-    if(await AppBloc().isLoggedIn() ) {
-      Get.toNamed(HomePage.routeName);
-    } else {
-      Get.offAllNamed(LoginPage.routeName);
-    }
+    Get.toNamed(HomePage.routeName);
+    // if(await AppBloc().isLoggedIn() ) {
+    //   Get.toNamed(HomePage.routeName);
+    // } else {
+    //   Get.offAllNamed(LoginPage.routeName);
+    // }
   }
 }
