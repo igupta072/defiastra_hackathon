@@ -19,40 +19,7 @@ class SplashPage extends GetView<SplashController> {
        mainAxisAlignment: MainAxisAlignment.center,
        crossAxisAlignment: CrossAxisAlignment.center,
        children: [
-         AppButton.primary(
-           title: "Add Player",
-           onPressed: () {
-            // controller.addToGameTable();
-           },
-         ),
-         SizedBox(height: 20.r,),
-         AppButton.primary(
-           title: "Update Round",
-           onPressed: () {
-             final player = Player(id: "800d048a-3058-4357-b5f1-12be09a9ed5b",
-                 username: "Indrozz",
-                 avatar: "https://cdn-icons-png.flaticon.com/512/6858/6858504.png",
-                 hasLeft: false, isActive: true
-             );
-             // controller.updateRound(
-             //     "5c6ad401-29f0-4adf-b1e4-41ddc03b04a2",
-             //     Rounds(
-             //       rn: 2,
-             //       won: null
-             //     )
-             // );
-           },
-         ),
-         SizedBox(height: 20.r,),
-         AppButton.primary(
-           title: "Update Status",
-           onPressed: () {
-             // controller.updateGameTableStatus(
-             //     "5c6ad401-29f0-4adf-b1e4-41ddc03b04a2",
-             //     GameTableStatus.completed
-             // );
-           },
-         ),
+
        ],
      ),
    );
