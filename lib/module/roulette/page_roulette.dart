@@ -25,6 +25,9 @@ class RoulettePage extends GetView<RouletteController> {
             CasinoRoulette(balance: 1000.0, onRoundComplete: (hasWon, amount) async {
               if(hasWon) {
                 _showWinningDialog(context, amount.toDouble());
+              } else {
+                // final jobId = await controller.transferToken(0.01);
+                // print("Transfer success: $jobId");
               }
               await controller.updateRound(hasWon);
               controller.roundAmount = amount;

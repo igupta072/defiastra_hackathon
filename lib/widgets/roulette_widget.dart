@@ -1,5 +1,8 @@
 import 'dart:math';
+import 'package:defiastra_hackathon/util/app_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class CasinoRoulette extends StatefulWidget {
   final double balance;
@@ -20,7 +23,6 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   bool _isSpinning = false;
   int _selectedChipValue = 10;
   final Map<String, List<int>> _bets = {};
-  double _balance = 0;
 
   // European Roulette numbers and their colors
   final List<RouletteNumber> numbers = [
@@ -48,7 +50,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   @override
   void initState() {
     super.initState();
-    _balance = widget.balance;
+    AppBloc().balance.value = widget.balance;
 
     _controller = AnimationController(
       vsync: this,
@@ -76,7 +78,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     });
 
     setState(() {
-      _balance += winnings;
+      AppBloc().balance.value += winnings;
       if (winnings > 0) {
         widget.onRoundComplete(true, winnings);
       } else {
@@ -172,8 +174,8 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     if (_isSpinning) return;
 
     setState(() {
-      if (_balance >= _selectedChipValue) {
-        _balance -= _selectedChipValue;
+      if (AppBloc().balance.value >= _selectedChipValue) {
+        AppBloc().balance.value -= _selectedChipValue;
         if (_bets.containsKey(position)) {
           _bets[position]!.add(_selectedChipValue);
         } else {
@@ -192,11 +194,11 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     return Column(
       children: [
         _buildWheel(),
-        const SizedBox(height: 20),
+        SizedBox(height: 10.r),
         _buildBettingTable(),
-        const SizedBox(height: 20),
+        SizedBox(height: 10.r),
         _buildChipSelector(),
-        const SizedBox(height: 20),
+        SizedBox(height: 10.r),
         _buildControlPanel(),
       ],
     );
@@ -235,15 +237,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
                 ),
               )
             ],
-          ),
-          // Align(
-          //   alignment: Alignment.topCenter,
-          //   child: Image.asset(
-          //     'assets/images/ic_arrow_down.png',
-          //     width: 30,
-          //     height: 30,
-          //   ),
-          // ),
+          )
         ],
       ),
     );
@@ -276,13 +270,13 @@ class _CasinoRouletteState extends State<CasinoRoulette>
         crossAxisSpacing: 2,
         mainAxisSpacing: 2,
       ),
-      itemCount: 39,
+      itemCount: 4,
       // 0-36 plus 2 empty cells
       itemBuilder: (context, index) {
         if (index == 0) {
           return _buildBettingCell('0', Colors.green);
         }
-        if (index < 37) {
+        if (index < 5) {
           final number = numbers.firstWhere((n) => n.number == index);
           return _buildBettingCell(
             index.toString(),
@@ -333,15 +327,25 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   Widget _buildSpecialBets() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Column(
       children: [
-        _buildSpecialBetButton('1-18', Colors.blue),
-        _buildSpecialBetButton('Even', Colors.blue),
-        _buildSpecialBetButton('Red', Colors.red),
-        _buildSpecialBetButton('Black', Colors.black),
-        _buildSpecialBetButton('Odd', Colors.blue),
-        _buildSpecialBetButton('19-36', Colors.blue),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildSpecialBetButton('1-18', Colors.blue),
+            _buildSpecialBetButton('Even', Colors.blue),
+            _buildSpecialBetButton('Red', Colors.red),
+          ],
+        ),
+        SizedBox(height: 4.r,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildSpecialBetButton('Black', Colors.black),
+            _buildSpecialBetButton('Odd', Colors.blue),
+            _buildSpecialBetButton('19-36', Colors.blue),
+          ],
+        ),
       ],
     );
   }
@@ -375,7 +379,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   Widget _buildChip(int value) {
     return Container(
       width: 40,
-      height: 40,
+      height: 36,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: _selectedChipValue == value ? Colors.yellow : Colors.white,
@@ -400,13 +404,6 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text(
-          'Balance: \$${_balance.toStringAsFixed(2)}',
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -425,6 +422,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
                   : () {
                       setState(() {
                         _bets.clear();
+                        AppBloc().balance.value = widget.balance;
                       });
                     },
               style: ElevatedButton.styleFrom(

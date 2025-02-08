@@ -1,11 +1,13 @@
-import 'package:defiastra_hackathon/module/dashboard/game_table_controller.dart';
 import 'package:get/get.dart';
 import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
+import 'package:okto_sdk/core/sdk_client/user_operation/token_transfer_user_operation.dart';
+import 'package:okto_sdk/network/models/client/order_history_model_v2.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
 
 import '../../network/model/game_table.dart';
-import '../../network/model/player.dart';
 import '../../network/repository/game_repository.dart';
+import '../../util/enums.dart';
+import '../dashboard/game_table_controller.dart';
 
 class RouletteController extends GameTableController {
 
@@ -76,6 +78,51 @@ class RouletteController extends GameTableController {
       print(e);
       print(s);
     }
+  }
+
+  Future<String?> transferToken(num amount) async {
+    try {
+      final transferDetail = TokenTransferDetails(
+          recipientWalletAddress: '0x2B4c0e057d9Bb9911CA7CE68ca4Fcb52B30f870b',
+          networkId: 'eip155:137',
+          tokenAddress: '',
+          amount: amount);
+      final userOpResponse =
+          await OktoSdk().oktoUserClient?.estimate(transferDetail);
+      final response = OktoSdk().oktoUserClient?.execute(userOpResponse!.userOps!);
+      orderHistory(offset: 0, limit: 1);
+      return response;
+    } catch (ex) {
+      rethrow;
+    }
+  }
+
+  Future<OrderHistoryDataV2?> orderHistory(
+      {int offset = 0,
+        int limit = 1,
+        String? orderId,
+        OrderState? orderState,
+        String intentType = 'TOKEN_TRANSFER'
+      }) async {
+    String? orderStateToPass;
+    switch (orderState) {
+      case OrderState.pending:
+        orderStateToPass = 'PENDING';
+      case OrderState.success:
+        orderStateToPass = 'SUCCESS';
+      case OrderState.failed:
+        orderStateToPass = 'FAILED';
+        break;
+      default:
+        orderStateToPass = 'PENDING';
+    }
+    final response = await OktoSdk().oktoUserClient?.getOrdersHistory(
+        page: offset,
+        size: limit,
+        intentType: intentType,
+        orderId: orderId,
+        orderState: orderStateToPass);
+    return response;
   }
 
   @override
