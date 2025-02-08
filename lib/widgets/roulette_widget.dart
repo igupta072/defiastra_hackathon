@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:defiastra_hackathon/widgets/spinner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CasinoRoulette extends StatefulWidget {
   final double balance;
@@ -55,13 +56,14 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   void initState() {
     super.initState();
     _balance = widget.balance;
-   mySpinController.initLoad(
+    mySpinController.initLoad(
       tickerProvider: this,
       itemList: numbers,
     ).then((_) {
       mySpinController.baseAnimation.addListener(() => setState(() {}));
       mySpinController.baseAnimation.addStatusListener((status) {
-        if (status == AnimationStatus.completed && !mySpinController.xSpinning) {
+        if (status == AnimationStatus.completed &&
+            !mySpinController.xSpinning) {
           _calculateWinnings();
         }
       });
@@ -100,12 +102,6 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   bool _isBetWinning(String betPosition, int winningNumber) {
-
-    // if (betPosition.contains('-')) {
-    //   final numbers = betPosition.split('-').map(int.parse).toList();
-    //   return numbers.contains(winningNumber);
-    // }
-
     final num = numbers[winningNumber];
 
     switch (betPosition) {
@@ -179,11 +175,11 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     return Column(
       children: [
         _buildWheel2(),
-        const SizedBox(height: 20),
+        SizedBox(height: 10.r),
         _buildBettingTable(),
-        const SizedBox(height: 20),
+        SizedBox(height: 10.r),
         _buildChipSelector(),
-        const SizedBox(height: 20),
+        SizedBox(height: 10.r),
         _buildControlPanel(),
       ],
     );
@@ -196,13 +192,13 @@ class _CasinoRouletteState extends State<CasinoRoulette>
         _calculateWinnings();
       },
       itemList: numbers,
-      wheelSize: 350,
+      wheelSize: 340,
     );
   }
 
   Widget _buildBettingTable() {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(8.r),
       decoration: BoxDecoration(
         color: Colors.green.shade900,
         border: Border.all(color: Colors.amber, width: 2),
@@ -284,15 +280,24 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   }
 
   Widget _buildSpecialBets() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Column(
       children: [
-        _buildSpecialBetButton('1-18', Colors.blue),
-        _buildSpecialBetButton('Even', Colors.blue),
-        _buildSpecialBetButton('Red', Colors.red),
-        _buildSpecialBetButton('Black', Colors.black),
-        _buildSpecialBetButton('Odd', Colors.blue),
-        _buildSpecialBetButton('19-36', Colors.blue),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildSpecialBetButton('1-18', Colors.blue),
+            _buildSpecialBetButton('Even', Colors.blue),
+            _buildSpecialBetButton('Red', Colors.red),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildSpecialBetButton('Black', Colors.black),
+            _buildSpecialBetButton('Odd', Colors.blue),
+            _buildSpecialBetButton('19-36', Colors.blue),
+          ],
+        )
       ],
     );
   }
@@ -313,7 +318,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [0.01, 0.05, 0.1, 0.15, 0.2].map((value) {
         return Padding(
-          padding: EdgeInsets.all(4),
+          padding: EdgeInsets.all(4.r),
           child: GestureDetector(
             onTap: () => setState(() => _selectedChipValue = value),
             child: _buildChip((value * 100).toInt()),
@@ -351,13 +356,6 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text(
-          'Balance: \$${_balance.toStringAsFixed(2)}',
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -366,7 +364,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               ),
               child: Text(mySpinController.xSpinning ? 'Spinning...' : 'SPIN!'),
             ),
@@ -374,14 +372,14 @@ class _CasinoRouletteState extends State<CasinoRoulette>
               onPressed: mySpinController.xSpinning
                   ? null
                   : () {
-                      setState(() {
-                        _bets.clear();
-                      });
-                    },
+                setState(() {
+                  _bets.clear();
+                });
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.grey,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               ),
               child: const Text('Clear Bets'),
             ),
@@ -476,7 +474,8 @@ class RoulettePainter extends CustomPainter {
     canvas.drawCircle(
       Offset(centerX, centerY),
       radius * 0.1,
-      Paint()..color = Colors.amber,
+      Paint()
+        ..color = Colors.amber,
     );
   }
 

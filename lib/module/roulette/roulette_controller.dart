@@ -84,7 +84,7 @@ class RouletteController extends GameTableController {
   Future<String?> transferToken(num amount) async {
     try {
       final transferDetail = TokenTransferDetails(
-          recipientWalletAddress: '0x2B4c0e057d9Bb9911CA7CE68ca4Fcb52B30f870b',
+          recipientWalletAddress: '0x06B6BD442fB7eFa392C32793bf761F8a30625ff4',
           networkId: 'eip155:137',
           tokenAddress: '',
           amount: amount);
@@ -135,8 +135,8 @@ class RouletteController extends GameTableController {
   Future<String> transferWinningFunds(num amount) {
     try {
       return CryptoUtility.transferFunds(
-          privateKey: "4af7746b7a3dedfb07f99702088469a74363be6d3bdf6de7a7cdbf5abbf1c68e",
-          recipientAddress: "0xbF803aeE0aC4E3fB8472E8fF97CF8a9f7ffb2e55",
+          privateKey: "43891adc5333ac5d96ffc0ab2d12d4a1677cbf550c3ae1dc89a57516df499d3c",
+          recipientAddress: gameArgs.player.id ?? "",
           amount: amount,
           url: "https://polygon-rpc.com"
       );
