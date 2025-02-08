@@ -23,13 +23,18 @@ class HomePage extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              AppButton.primary(
+                  title: "Selected token",
+                  onPressed: () {
+                    controller.showTokenBottomSheet();
+                  }),
 
-              Obx(() => Expanded(child: CryptoListWidget(itemList: controller.cryptoTokens.value))),
+              SizedBox(height: 32.r,),
 
               AppButton.primary(
                   title: "Get wallets",
                   onPressed: () {
-                    controller.getWallets();
+                    controller.onGetWalletClicked();
                   })
             ]));
   }
@@ -54,7 +59,7 @@ class CryptoListWidget extends GetView<HomeController> {
               ? Column(
             children: [
               Image.asset(
-                "assets/png_assets/empty_state_crypto.png",
+                "assets/images/empty_state_crypto.png",
                 height: 144.h,
                 width: 144.h,
               ),
@@ -108,38 +113,31 @@ class CryptoListItem extends GetView<HomeController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
+        CircularImageHolder(
+            imagePath: itemModel.tokenImage ?? "",
+            isSVG: false,
+            height: 56.r,
+            width: 56.r),
+        SizedBox(
+          width: 12.w,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircularImageHolder(
-                imagePath: itemModel.tokenImage ?? "",
-                isSVG: false,
-                height: 56.r,
-                width: 56.r),
-            SizedBox(
-              width: 12.w,
+            Text(
+              itemModel.name ?? "",
+              // style: OktoTextStyle.uiText1(theme.textPrimaryColor),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  itemModel.name ?? "",
-                  // style: OktoTextStyle.uiText1(theme.textPrimaryColor),
-                ),
-                Text(
-                  "${controller.getCurrentBalance(itemModel)} ${itemModel.symbol}",
-                  // style: OktoTextStyle.body3(theme.textSecondaryColor),
-                ),
-              ],
+            Text(
+              "${controller.getCurrentBalance(itemModel)} ${itemModel.symbol}",
+              // style: OktoTextStyle.body3(theme.textSecondaryColor),
             ),
           ],
         ),
-        Visibility(
-          visible: true,
-          child: Obx(() => Text(
-            controller.getTokenPrice(itemModel),
-            // style: OktoTextStyle.uiText3(theme.textPrimaryColor),
-          )),
-        ),
+        Text(
+          controller.getTokenPrice(itemModel),
+          // style: OktoTextStyle.uiText3(theme.textPrimaryColor),
+        )
       ],
     );
   }

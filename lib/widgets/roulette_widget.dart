@@ -204,35 +204,46 @@ class _CasinoRouletteState extends State<CasinoRoulette>
 
   Widget _buildWheel() {
     return SizedBox(
-      height: 300,
+      height: 350,
       width: 300,
-      child: Stack(
-        alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Transform.rotate(
-            angle: _animation?.value ?? _currentRotation * (pi / 180),
-            child: CustomPaint(
-              size: const Size(300, 300),
-              painter: RoulettePainter(numbers),
-            ),
+          Image.asset(
+            'assets/images/ic_arrow_down.png',
+            width: 30,
+            height: 30,
           ),
-          Container(
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.amber, width: 2),
-            ),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Transform.rotate(
+                angle: _animation?.value ?? _currentRotation * (pi / 180),
+                child: CustomPaint(
+                  size: const Size(300, 300),
+                  painter: RoulettePainter(numbers),
+                ),
+              ),
+              Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.amber, width: 2),
+                ),
+              )
+            ],
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Image.asset(
-              'assets/images/ic_arrow_down.png',
-              width: 30,
-              height: 30,
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.topCenter,
+          //   child: Image.asset(
+          //     'assets/images/ic_arrow_down.png',
+          //     width: 30,
+          //     height: 30,
+          //   ),
+          // ),
         ],
       ),
     );

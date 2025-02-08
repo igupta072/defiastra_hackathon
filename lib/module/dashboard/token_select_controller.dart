@@ -25,6 +25,6 @@ class TokenSelectController extends GetxController {
   });
 
   void onTokenTap(GroupTokensV2 token) {
-    Get.toNamed(PageRoulette.route);
+    Get.toNamed(RoulettePage.route);
   }
 }

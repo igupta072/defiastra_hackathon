@@ -1,10 +1,10 @@
+import 'package:defiastra_hackathon/module/dashboard/token_select_bottomsheet.dart';
 import 'package:defiastra_hackathon/util/app_utility.dart';
 import 'package:get/get.dart';
 import 'package:okto_sdk/network/models/portfolio_data_v2.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
 
 class HomeController extends GetxController {
-
   RxList<GroupTokensV2> cryptoTokens = <GroupTokensV2>[].obs;
   Rx<AggregatedDataV2> aggregatedData = AggregatedDataV2().obs;
 
@@ -50,4 +50,15 @@ class HomeController extends GetxController {
     });
   }
 
+  void showTokenBottomSheet() {
+    Get.bottomSheet(TokenSelectBottomsheet(allTokenList: cryptoTokens));
+  }
+
+  void onGetWalletClicked() {
+    getWallets().then((wallets) {
+
+    }).onError((e, s) {
+
+    });
+  }
 }
