@@ -3,6 +3,7 @@ import 'package:defiastra_hackathon/util/app_bloc.dart';
 import 'package:defiastra_hackathon/widgets/roulette_widget.dart';
 import 'package:defiastra_hackathon/widgets/spinner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class RoulettePage extends GetView<RouletteController> {
@@ -27,6 +28,16 @@ class RoulettePage extends GetView<RouletteController> {
                 ),
               ),
             ),
+            IconButton(
+              onPressed: () {
+                controller.fetchPortfolio();
+              },
+              icon: Icon(
+                Icons.refresh,
+                size: 32.r,
+                color: Colors.black,
+              )
+            )
           ],
         ),
         body: Column(

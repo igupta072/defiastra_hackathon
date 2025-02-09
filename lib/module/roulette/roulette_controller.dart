@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
 import 'package:okto_sdk/core/sdk_client/user_operation/token_transfer_user_operation.dart';
 import 'package:okto_sdk/network/models/client/order_history_model_v2.dart';
+import 'package:okto_sdk/network/models/portfolio_data_v2.dart';
 import 'package:okto_sdk/okto_flutter_sdk.dart';
 import 'package:okto_sdk/util/crypto_utility.dart';
 
@@ -146,5 +147,23 @@ class RouletteController extends GameTableController {
     } catch (e, s) {
       rethrow;
     }
+  }
+
+  Future<void> fetchPortfolio() async {
+    OktoSdk().oktoUserClient?.getCryptoPortfolio().then((portfolioData) {
+      List<GroupTokensV2> cryptoItems = [];
+      if (portfolioData.groupTokens?.isNotEmpty ?? false) {
+        for (int i = 0; i < (portfolioData.groupTokens?.length ?? 0); i++) {
+          var token = portfolioData.groupTokens?[i];
+          if (token != null) {
+            cryptoItems.add(token);
+          }
+        }
+      }
+      final token = cryptoItems.firstWhereOrNull((t) => t.id == gameArgs.token.id);
+      if (token != null) {
+        balance.value = double.tryParse(token.balance ?? balance.value.toString()) ?? balance.value;
+      }
+    });
   }
 }

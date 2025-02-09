@@ -29,7 +29,7 @@ class HomePage extends GetView<HomeController> {
             },
             icon: Icon(
               size: 24.r,
-              Icons.wallet,
+              Icons.refresh,
               color: context.colors.surface1,
             )
           )

@@ -93,6 +93,7 @@ class HomeController extends GetxController {
     }).onError((e, s) {
 
     });
+    _fetchPortfolio();
   }
 
   void onGameSelected(GameModel game, GroupTokensV2? token) {
