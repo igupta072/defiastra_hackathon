@@ -50,13 +50,16 @@ class RoulettePage extends GetView<RouletteController> {
                 if (hasWon) {
                   _showWinningDialog(context, amount.toDouble());
                   try {
-                    controller.transferWinningFunds(0.02);
+                    controller.balance.value +=  amount;
+                    controller.transferWinningFunds(amount * 2);
                   } catch (e, s) {
                     print(e);
                     print(s);
                   }
                 } else {
-                  controller.transferToken(0.01);
+                  _showLooseDialog(context, amount.toDouble());
+                  controller.balance.value -=  amount;
+                  controller.transferToken(amount);
                 }
                 await controller.updateRound(hasWon);
                 controller.roundAmount = amount;
@@ -78,6 +81,23 @@ class RoulettePage extends GetView<RouletteController> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLooseDialog(BuildContext context, double winnings) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Congratulations!'),
+        content: Text(
+            'You Lose \$${winnings.toStringAsFixed(2)}!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Play Again ?'),
           ),
         ],
       ),

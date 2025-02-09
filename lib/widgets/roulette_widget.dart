@@ -84,9 +84,9 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     setState(() {
       _balance += winnings;
       if (winnings > 0) {
-        widget.onRoundComplete(true, winnings);
+        widget.onRoundComplete(true, winnings / 100);
       } else {
-        widget.onRoundComplete(false, _selectedChipValue);
+        widget.onRoundComplete(false, _selectedChipValue / 100);
       }
       _bets.clear();
     });
@@ -155,8 +155,8 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     if (mySpinController.xSpinning) return;
 
     setState(() {
-      if (_balance >= _selectedChipValue) {
-        _balance -= _selectedChipValue;
+      if (_balance >= (_selectedChipValue / 100)) {
+        _balance -= _selectedChipValue / 100;
         if (_bets.containsKey(position)) {
           _bets[position]!.add(_selectedChipValue);
         } else {
@@ -316,12 +316,12 @@ class _CasinoRouletteState extends State<CasinoRoulette>
   Widget _buildChipSelector() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [0.01, 0.05, 0.1, 0.15, 0.2].map((value) {
+      children: [1, 5, 10, 15, 20].map((value) {
         return Padding(
           padding: EdgeInsets.all(4.r),
           child: GestureDetector(
             onTap: () => setState(() => _selectedChipValue = value),
-            child: _buildChip((value * 100).toInt()),
+            child: _buildChip((value).toInt()),
           ),
         );
       }).toList(),
