@@ -4,6 +4,7 @@ import 'package:defiastra_hackathon/module/dashboard/token_select_bottomsheet.da
 import 'package:defiastra_hackathon/module/roulette/page_roulette.dart';
 import 'package:defiastra_hackathon/network/model/game_table.dart';
 import 'package:defiastra_hackathon/network/model/player.dart';
+import 'package:defiastra_hackathon/util/app_bloc.dart';
 import 'package:defiastra_hackathon/util/app_utility.dart';
 import 'package:get/get.dart';
 import 'package:okto_sdk/core/repository/sdk_repository_provider.dart';
@@ -55,6 +56,7 @@ class HomeController extends GetxController {
       }
       cryptoTokens.value = cryptoItems;
       aggregatedData.value = portfolioData.aggregatedData ?? AggregatedDataV2();
+      AppBloc().balance.value = double.tryParse(aggregatedData.value.holdingsPriceUsdt ?? "0.0") ?? 0.0;
     });
   }
 
@@ -74,6 +76,7 @@ class HomeController extends GetxController {
     OktoSdk().oktoUserClient?.getWallets().then((wallet) {
       final token = wallet.wallets?.firstWhereOrNull((w) => w.networkName?.toLowerCase() == "polygon");
       player.id = token?.address ?? wallet.wallets?.firstOrNull?.address;
+      print("INDRAA :: ${player.id}");
     }).onError((e, s) {
       print("$e $s");
     });

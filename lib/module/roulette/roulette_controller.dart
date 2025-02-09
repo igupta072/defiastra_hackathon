@@ -15,12 +15,14 @@ class RouletteController extends GameTableController {
   final Rx<GameTable?> _gameTable = Rx(null);
   int _roundNumber = 0;
   num roundAmount = 0;
+  final RxDouble balance = 0.0.obs;
 
   RouletteController({required super.gameArgs});
 
   @override
   void onInit() async {
     _gameTable.value = await addToGameTable();
+    balance.value = double.tryParse(gameArgs.token.holdingsPriceUsdt ?? "0.0") ?? 0.0;
     super.onInit();
   }
 
@@ -84,9 +86,9 @@ class RouletteController extends GameTableController {
   Future<String?> transferToken(num amount) async {
     try {
       final transferDetail = TokenTransferDetails(
-          recipientWalletAddress: '0x06B6BD442fB7eFa392C32793bf761F8a30625ff4',
+          recipientWalletAddress: '0x603CD7B8EAbd2c5CE573AEE3371823967aBFB9eC',
           networkId: 'eip155:137',
-          tokenAddress: '',
+          tokenAddress: gameArgs.token.tokenAddress,
           amount: amount);
       final userOpResponse =
           await OktoSdk().oktoUserClient?.estimate(transferDetail);
@@ -135,7 +137,7 @@ class RouletteController extends GameTableController {
   Future<String> transferWinningFunds(num amount) {
     try {
       return CryptoUtility.transferFunds(
-          privateKey: "43891adc5333ac5d96ffc0ab2d12d4a1677cbf550c3ae1dc89a57516df499d3c",
+          privateKey: "b07d71f7d26232a3c01de9e4ad370884e17f7fa76fc36c3a26399b7889865009",
           recipientAddress: gameArgs.player.id ?? "",
           amount: amount,
           url: "https://polygon-rpc.com"

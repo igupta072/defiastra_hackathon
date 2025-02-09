@@ -20,7 +20,7 @@ class RoulettePage extends GetView<RouletteController> {
           actions: [
             Obx(
               () => Text(
-                'Balance: \$${AppBloc().balance.toStringAsFixed(2)}',
+                'Balance: \$${controller.balance.value}',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -34,7 +34,7 @@ class RoulettePage extends GetView<RouletteController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CasinoRoulette(
-              balance: 1000.0,
+              balance: double.tryParse(controller.gameArgs.token.balance ?? "0.0") ?? 0.0,
               onRoundComplete: (hasWon, amount) async {
                 if (hasWon) {
                   _showWinningDialog(context, amount.toDouble());
