@@ -91,7 +91,7 @@ class RoulettePage extends GetView<RouletteController> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Congratulations!'),
+        title: const Text('Oops!'),
         content: Text(
             'You Lose \$${winnings.toStringAsFixed(2)}!'),
         actions: [
