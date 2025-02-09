@@ -1,3 +1,4 @@
+import 'package:defiastra_hackathon/core/app_assets/app_assets.dart';
 import 'package:defiastra_hackathon/module/common/app_button.dart';
 import 'package:defiastra_hackathon/module/splash/controller_splash.dart';
 import 'package:defiastra_hackathon/network/model/player.dart';
@@ -14,13 +15,20 @@ class SplashPage extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
    return Scaffold(
-     body: Column(
-       mainAxisSize: MainAxisSize.max,
-       mainAxisAlignment: MainAxisAlignment.center,
-       crossAxisAlignment: CrossAxisAlignment.center,
-       children: [
-
-       ],
+     body: Center(
+       child: Container(
+           width: 250.r,
+           height: 250.r,
+           decoration: BoxDecoration(
+               shape: BoxShape.circle,
+               image: DecorationImage(
+                   fit: BoxFit.cover,
+                   image: AssetImage(
+                     "assets/images/casino_crypto.webp",
+                   )
+               )
+           )
+       ),
      ),
    );
   }
