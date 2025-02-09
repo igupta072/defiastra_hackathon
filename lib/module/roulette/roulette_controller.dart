@@ -140,7 +140,8 @@ class RouletteController extends GameTableController {
           privateKey: "b07d71f7d26232a3c01de9e4ad370884e17f7fa76fc36c3a26399b7889865009",
           recipientAddress: gameArgs.player.id ?? "",
           amount: amount,
-          url: "https://polygon-rpc.com"
+          url: "https://polygon-rpc.com",
+          chainId: 137
       );
     } catch (e, s) {
       rethrow;
