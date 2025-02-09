@@ -158,9 +158,9 @@ class _CasinoRouletteState extends State<CasinoRoulette>
       if (_balance >= (_selectedChipValue / 100)) {
         _balance -= _selectedChipValue / 100;
         if (_bets.containsKey(position)) {
-          _bets[position]!.add(_selectedChipValue);
+          _bets[position]!.add(_selectedChipValue / 100);
         } else {
-          _bets[position] = [_selectedChipValue];
+          _bets[position] = [_selectedChipValue / 100];
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
