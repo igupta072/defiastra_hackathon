@@ -50,6 +50,9 @@ dependencies:
   get: 4.6.6
   google_sign_in: ^6.1.6
 
+  #Qq
+  qr_flutter: 4.1.0
+
   #Rr
   rxdart: ^0.27.7
 

@@ -1,3 +1,4 @@
+import 'package:defiastra_hackathon/module/dashboard/add_funds_screen.dart';
 import 'package:defiastra_hackathon/module/dashboard/game_table_argument.dart';
 import 'package:defiastra_hackathon/module/dashboard/game_table_controller.dart';
 import 'package:defiastra_hackathon/module/dashboard/home_controller.dart';
@@ -39,5 +40,9 @@ class AppRoutes {
         binding: BindingsBuilder(() {
           Get.put(RouletteController(gameArgs: Get.arguments as GameTableArgument));
         })),
+
+    GetPage(
+        name: AddFundsScreen.route,
+        page: () =>  AddFundsScreen(address: Get.arguments as String,))
   ];
 }

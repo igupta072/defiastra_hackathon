@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:defiastra_hackathon/application.dart';
 import 'package:defiastra_hackathon/core/app_theme/app_theme.dart';
 import 'package:defiastra_hackathon/module/common/app_button.dart';
+import 'package:defiastra_hackathon/module/dashboard/add_funds_screen.dart';
 import 'package:defiastra_hackathon/module/dashboard/home_controller.dart';
 import 'package:defiastra_hackathon/module/roulette/page_roulette.dart';
+import 'package:defiastra_hackathon/util/app_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,15 +25,51 @@ class HomePage extends GetView<HomeController> {
       appBar: AppBar(
         title: const Text('Lobby'),
         actions: [
-          IconButton(
-            onPressed: () {
+          InkWell(
+            onTap: () {
               controller.onGetWalletClicked();
             },
-            icon: Icon(
-              size: 24.r,
-              Icons.refresh,
-              color: context.colors.surface1,
-            )
+            child: Row(
+              children: [
+                Obx(
+                      () => Text(
+                    'Balance: \$${AppBloc().balance.value}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 4.r,),
+                Icon(
+                  size: 20.r,
+                  Icons.refresh,
+                  color: context.colors.surface1,
+                )
+              ],
+            ),
+          ),
+          IconButton(
+              onPressed: () {
+                Get.toNamed(
+                  AddFundsScreen.route,
+                  arguments: controller.player.id
+                );
+              },
+
+              icon:  Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 8.r),
+                alignment: Alignment.center,
+                color: Colors.red,
+                child: Text(
+                  'Add Funds',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white
+                  ),
+                ),
+              )
           )
         ],
       ),

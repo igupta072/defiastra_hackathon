@@ -28,16 +28,16 @@ class RoulettePage extends GetView<RouletteController> {
                 ),
               ),
             ),
-            IconButton(
-              onPressed: () {
-                controller.fetchPortfolio();
-              },
-              icon: Icon(
-                Icons.refresh,
-                size: 32.r,
-                color: Colors.black,
-              )
-            )
+            // IconButton(
+            //   onPressed: () {
+            //     controller.fetchPortfolio();
+            //   },
+            //   icon: Icon(
+            //     Icons.refresh,
+            //     size: 32.r,
+            //     color: Colors.black,
+            //   )
+            // )
           ],
         ),
         body: Column(

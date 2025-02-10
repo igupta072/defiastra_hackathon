@@ -16,6 +16,7 @@ import 'package:okto_sdk/util/crypto_utility.dart';
 class HomeController extends GetxController {
   
   late  OktoCoreClient host;
+  RxDouble totalBalance = 0.0.obs;
 
   late final player = Player(
       id: OktoSdk().oktoUserClient?.client.swa,
@@ -74,9 +75,8 @@ class HomeController extends GetxController {
 
   Future<void> getWallets() async {
     OktoSdk().oktoUserClient?.getWallets().then((wallet) {
-      final token = wallet.wallets?.firstWhereOrNull((w) => w.networkName?.toLowerCase() == "polygon");
+      final token = wallet.wallets?.firstWhereOrNull((w) => w.networkName?.toLowerCase() == "polygon" || w.networkName?.toLowerCase() != "solana");
       player.id = token?.address ?? wallet.wallets?.firstOrNull?.address;
-      print("INDRAA :: ${player.id}");
     }).onError((e, s) {
       print("$e $s");
     });
