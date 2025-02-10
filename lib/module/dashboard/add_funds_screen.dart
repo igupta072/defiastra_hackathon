@@ -66,6 +66,12 @@ class AddFundsScreen extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: 20.r,),
+            Text(
+              'Note: Please add POL token in Polygon chain.',
+              style: context.textStyles
+                  .uiTextRegular(context.colors.surface1, bold: true),
+            ),
             Expanded(child: SizedBox(height: 24.r,)),
             AppButton.primary(
               onPressed: () {
