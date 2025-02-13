@@ -76,7 +76,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
 
     _bets.forEach((betPosition, chips) {
       if (_isBetWinning(betPosition, winningNumber)) {
-        winnings += chips.fold(0, (sum, chip) => (sum + chip).toInt()) *
+        winnings += chips.fold(0.0, (sum, chip) => sum + chip) *
             _getBetMultiplier(betPosition);
       }
     });
