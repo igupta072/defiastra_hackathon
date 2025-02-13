@@ -84,7 +84,7 @@ class _CasinoRouletteState extends State<CasinoRoulette>
     setState(() {
       _balance += winnings;
       if (winnings > 0) {
-        widget.onRoundComplete(true, winnings / 100);
+        widget.onRoundComplete(true, winnings);
       } else {
         widget.onRoundComplete(false, _selectedChipValue / 100);
       }
